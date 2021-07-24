@@ -1,6 +1,6 @@
 <?php
 
-namespace \T2PAuthen;
+namespace T2PAuthen;
 
 /**
  * Arthor: Amnat

@@ -1,5 +1,5 @@
 <?php
-namespace \T2PAuthen;
+namespace T2PAuthen;
 
 use \T2PAuthen\T2PAuthenException;
 
