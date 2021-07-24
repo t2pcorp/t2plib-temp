@@ -5,6 +5,9 @@
     "keywords": ["t2plib","library"],
     "homepage": "https://www.t2pco.com",
     "license": "MIT",
+    "require": {
+        "php": ">=5.6"
+    },
     "authors": [
         {
             "name": "Amnat",
