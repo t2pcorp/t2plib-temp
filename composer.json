@@ -1,0 +1,16 @@
+{
+    "name": "t2padmin/t2plib",
+    "type": "library",
+    "description": "Library for Partners ",
+    "keywords": ["relevant","tags","go","here"],
+    "homepage": "https://www.t2pco.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "itgroup",
+            "email": "itgroup@t2pco.com",
+            "homepage": "https://www.t2pco.com",
+            "role": "Developer"
+        }
+    ]
+}
