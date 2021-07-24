@@ -23,7 +23,7 @@
       },
       "autoload": {
         "psr-4": {
-            "AgusRdzGitHub": "src/"
+            "T2PAuthen\\": "src/"
           }
       },
       "autoload-dev": {
