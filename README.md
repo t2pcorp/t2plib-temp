@@ -15,7 +15,7 @@ error_reporting(E_ALL);
 
 require_once 'vendor/autoload.php';
 
-$auth = new T2PAuthen\T2PAuthentication();
+$auth = new T2PLib\T2PAuthen\T2PAuthentication();
 
 $method='POST';                                 //request method
 $timestamp=date('YmdHis');                      //current client timestamp
