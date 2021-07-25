@@ -1,7 +1,7 @@
 <?php
-namespace T2PAuthen;
+namespace T2PLib\T2PAuthen;
 
-use \T2PAuthen\T2PAuthenException;
+use \T2PLib\T2PAuthen\T2PAuthenException;
 
 class T2PAuthentication
 {

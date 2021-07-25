@@ -23,7 +23,7 @@
       },
       "autoload": {
         "psr-4": {
-            "T2PAuthen\\": "src/T2PAuthen"
+            "T2PLib\\": "src/T2PLib"
           }
       },
       "autoload-dev": {
