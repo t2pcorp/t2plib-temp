@@ -2,7 +2,6 @@
 
 namespace T2PLib\Job;
 
-use T2PLib\Models\Job;
 use Carbon\Carbon;
 
 class JobData
@@ -20,7 +19,7 @@ class JobData
     protected $notification;
     protected $notiFrequency;
 
-    public function initial(Job $job)
+    public function initial(Object $job)
     {
         $jobModifyData = new JobModifyData();
         $this->domain = $job->domain;

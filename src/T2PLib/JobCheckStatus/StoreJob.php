@@ -2,13 +2,11 @@
 
 namespace T2PLib\JobCheckStatus;
 
-use App\Models\Job;
-
 class StoreJob
 {
     public static function store($JobConfig, $data)
     {
-        $job = new Job;
+        $job = new \stdClass;
         $job->domain = $JobConfig->Domain;
         $job->job_id = $JobConfig->JobID;
         $job->last_run = $data->last_jobUpdate;

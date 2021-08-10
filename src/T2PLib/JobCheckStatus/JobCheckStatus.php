@@ -33,6 +33,7 @@ class JobCheckStatus
             }
 
             $job = StoreJob::store($JobConfig, $data);
+            dd($job);
             $jobObject = new JobObject($job);
             $status = $jobObject->getStatus();
             $domain = $JobConfig->Domain;
