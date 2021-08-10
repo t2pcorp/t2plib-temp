@@ -25,9 +25,8 @@ class JobCheckStatus
             $jobs_data = $data->jobs_data;
             $JobConfig = json_decode($jobs_data)->JobConfig;
             $JobExecuteInfo = json_decode($jobs_data)->JobExecuteInfo;
-            $supportAlert = CheckType::check($JobConfig->PeriodType);
 
-            if ($data->is_active == 'N' || !$supportAlert)
+            if ($data->is_active == 'N')
             {
                 continue;
             }
@@ -39,7 +38,7 @@ class JobCheckStatus
             $jobID = $JobConfig->JobID;
             $now = Carbon::now($JobConfig->TimeZone);
             
-            if ($status == 'fail')
+            if ($status == 'fail' || !$JobConfig->AdditionCondition->Success)
             {
                 $lastNoti = Carbon::parse($data->last_notification, $JobConfig->TimeZone);
                 $notiPeriod = $lastNoti->addMinutes($JobConfig->NotiFrequency);
