@@ -25,9 +25,18 @@ class JobStatus
 
     public function checkJobStatus()
     {
-        $this->status = $this->jobData->getLastRun()->copy()
+        if ($this->jobData->getPeriodType() == 'once')
+        {
+            $this->status = $this->jobData->getNow()->copy()
                 ->between($this->jobScheduleTime->getPreviousRun(), 
                 $this->jobScheduleTime->getPreviousRun()->copy()->addMinutes($this->jobData->getExecute()));
+        }
+        else
+        {
+            $this->status = $this->jobData->getLastRun()->copy()
+                ->between($this->jobScheduleTime->getPreviousRun(), 
+                $this->jobScheduleTime->getPreviousRun()->copy()->addMinutes($this->jobData->getExecute()));
+        }
         $this->status = $this->status? 'success' : 'fail';
     }
     
