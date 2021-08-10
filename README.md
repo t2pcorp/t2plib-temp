@@ -65,5 +65,25 @@ stdClass Object
 
     include 'vendor/autoload.php';
     use \T2PLib\JobLibrary\JobLibrary;
+
+    $job = new JobLibrary();
+
+    $job->setDomain('EXAMPLE');
+    $job->setJobID('EXAMPLE001');
+    $job->setName('Example Name');
+    $job->setPeriodTypeMin();
+    $job->setPeriodValue('1');
+    $job->setScheduleTime('01:00:00');
+    $job->setExecuteDuration('1');
+    $job->setLINENotification('token');
+    $job->setNotiFrequency('1');
+    $job->setArchiveLogUnitDay();
+    $job->setArchiveLogValue('1');
     
+    // Do Job Process......
+
+    $job->updateJobStatus(); // Done with Success Update
+    or
+    $job->updateJobStatus("Error Message"); // Done with Failed Update
+
 ```

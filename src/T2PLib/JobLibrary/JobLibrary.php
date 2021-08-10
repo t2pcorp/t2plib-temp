@@ -8,8 +8,14 @@ class JobLibrary
 {
     public $jobConfig;
     public $jobExecuteInfo;
+    public $env;
 
     public function __construct() {
+        $config = \T2P\Util\CommonConfig\Config::get("_ENV.*");
+        // print_r($config->value('_ENV.NAME'));
+        $this->env = $config->value('_ENV.NAME');
+        $this->env = "LOCAL";
+
         $this->jobConfig = (object) [
             'Domain' => 'default',
             'JobID' => 'default',
@@ -37,14 +43,6 @@ class JobLibrary
             'Success' => true,
             'Error' => ''
         ];
-    }
-
-    public function getAllData()
-    {
-        $jobConfig = '"JobConfig":'.json_encode($this->jobConfig);
-        $jobExecuteInfo = '"JobExecuteInfo":'.json_encode($this->jobExecuteInfo);
-        $job = '{' . $jobConfig . ',' . $jobExecuteInfo . '}';
-        return $job;
     }
 
     public function getDomain()
@@ -247,7 +245,7 @@ class JobLibrary
         $config->JobExecuteInfo = $this->jobExecuteInfo;
         $config = json_encode($config);
 
-        return JobAPI::getJobActiveStatus($domain, $jobID, $config);
+        return JobAPI::getJobActiveStatus($domain, $jobID, $config, $this->env);
     }
 
     public function updateJobStatus($errorMessage = '')
@@ -262,13 +260,13 @@ class JobLibrary
         $config->JobExecuteInfo = $this->jobExecuteInfo;
         $config = json_encode($config);
 
-        JobAPI::updateJobStatus($config);
+        JobAPI::updateJobStatus($config, $this->env);
     }
 
     public function updateJobRunningStatus()
     {
         $domain = $this->jobConfig->Domain;
         $jobID = $this->jobConfig->JobID;
-        JobAPI::updateJobRunningStatus($domain, $jobID);
+        JobAPI::updateJobRunningStatus($domain, $jobID, $this->env);
     }
 }
