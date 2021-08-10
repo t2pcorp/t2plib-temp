@@ -2,9 +2,9 @@
 
 namespace T2PLib\JobCheckStatus;
 
-// use App\Job\JobObject;
-// use App\Job\Notification;
-// use Carbon\Carbon;
+use T2PLib\Job\JobObject;
+use T2PLib\Job\Notification;
+use Carbon\Carbon;
 use \T2PLib\JobCheckStatus\StoreJob;
 use \T2PLib\JobCheckStatus\CheckType;
 
@@ -12,7 +12,6 @@ class JobCheckStatus
 {
     public static function process()
     {
-        dd("t");
         $url = "http://localhost:7005/api/Job/getJobDataList";
         $parameters = [];
         $headers = [];
