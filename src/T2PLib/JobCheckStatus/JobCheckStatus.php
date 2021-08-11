@@ -6,7 +6,6 @@ use T2PLib\Job\JobObject;
 use T2PLib\Job\Notification;
 use Carbon\Carbon;
 use \T2PLib\JobCheckStatus\StoreJob;
-use \T2PLib\JobCheckStatus\CheckType;
 
 class JobCheckStatus
 {
