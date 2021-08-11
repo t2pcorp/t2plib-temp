@@ -231,9 +231,8 @@ class JobLibrary
     
     public function setSMSNotification($phoneNumber)
     {
-        return // $this->jobConfigHasChange->Notification =
-        ($this->jobConfigHasChange->Notification = 
-        (($this->jobConfig->Notification['sms'] = $phoneNumber)? true : false));
+        return $this->jobConfigHasChange->Notification = 
+        (($this->jobConfig->Notification['sms'] = $phoneNumber)? true : false);
     }
     
     public function setPhoneNotification($phoneNumber)
