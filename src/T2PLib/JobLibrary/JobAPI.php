@@ -5,18 +5,18 @@ namespace T2PLib\JobLibrary;
 class JobAPI
 {
     private static function getEnvUrl($env) {
-        $url = "https://jobs-api.t2p.co.th";
+        $url = "https://job-api.t2p.co.th";
         if ($env == "LOCAL") {
             $url = "http://localhost:7005";
         }
         if ($env == "DEVELOP") {
-            $url = "https://dev-jobs-api.t2p.co.th";
+            $url = "https://dev-job-api.t2p.co.th";
         }
         if ($env == "SIT") {
-            $url = "https://sit-jobs-api.t2p.co.th";
+            $url = "https://sit-job-api.t2p.co.th";
         }
         if ($env == "TEST") {
-            $url = "https://test-jobs-api.t2p.co.th";
+            $url = "https://test-job-api.t2p.co.th";
         }
         return $url;
     }
