@@ -396,7 +396,7 @@ class JobLibrary
         return true;
     }
     
-    private function updateJobDashboard($value, $GraphName='default'){
+    public function updateJobDashboard($value, $GraphName='default'){
         $namespace = $this->jobConfig->Domain.':'.$this->jobConfig->JobID;
         $date = new DateTime();
         $metricData = [
@@ -425,7 +425,7 @@ class JobLibrary
         return putMetricData($cloudWatchClient, $cloudWatchRegion, $namespace, $metricData);
     }
 
-    function putMetricData($cloudWatchClient, $cloudWatchRegion, $namespace, $metricData)
+    private function putMetricData($cloudWatchClient, $cloudWatchRegion, $namespace, $metricData)
     {
         try {
             $result = $cloudWatchClient->putMetricData([
