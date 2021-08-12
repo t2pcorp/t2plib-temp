@@ -398,7 +398,7 @@ class JobLibrary
     
     public function updateJobDashboard($value, $GraphName='default'){
         $namespace = $this->jobConfig->Domain.':'.$this->jobConfig->JobID;
-        $date = new DateTime();
+        $date = new \DateTime();
         $metricData = [
             [
                 'MetricName' => 'Monitor',
