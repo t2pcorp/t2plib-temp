@@ -403,12 +403,12 @@ class JobLibrary
         $date = new \DateTime();
         $metricData = [
             [
-                'MetricName' => 'Monitor',
+                'MetricName' => $GraphName,
                 'Timestamp' => $date->getTimestamp(),
                 'Dimensions' => [
                     [
-                        'Name' => $GraphName,
-                        'Value' => $value
+                        'Name' => 'Dimensions',
+                        'Value' => $GraphName
                         
                     ]
                 ],
