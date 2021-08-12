@@ -395,4 +395,58 @@ class JobLibrary
         }
         return true;
     }
+    
+    private function updateJobDashboard($value, $GraphName='default'){
+        $namespace = $this->jobConfig->Domain.':'.$this->jobConfig->JobID;
+        $date = new DateTime();
+        $metricData = [
+            [
+                'MetricName' => 'Monitor',
+                'Timestamp' => $date->getTimestamp(),
+                'Dimensions' => [
+                    [
+                        'Name' => $GraphName,
+                        'Value' => $value
+                        
+                    ]
+                ],
+                'Unit' => 'Count',
+                'Value' => $value
+            ]
+        ];
+
+        $cloudWatchRegion = 'ap-southeast-1';
+        $cloudWatchClient = new CloudWatchClient([
+            'profile' => 'default',
+            'region' => $cloudWatchRegion,
+            'version' => '2010-08-01'
+        ]);
+
+        return putMetricData($cloudWatchClient, $cloudWatchRegion, $namespace, $metricData);
+    }
+
+    function putMetricData($cloudWatchClient, $cloudWatchRegion, $namespace, $metricData)
+    {
+        try {
+            $result = $cloudWatchClient->putMetricData([
+                'Namespace' => $namespace,
+                'MetricData' => $metricData
+            ]);
+            
+            if (isset($result['@metadata']['effectiveUri']))
+            {
+                if ($result['@metadata']['effectiveUri'] == 
+                    'https://monitoring.' . $cloudWatchRegion . '.amazonaws.com')
+                {
+                    return 'Successfully published datapoint(s).';
+                } else {
+                    return 'Could not publish datapoint(s).';
+                }
+            } else {
+                return 'Error: Could not publish datapoint(s).';
+            }
+        } catch (AwsException $e) {
+            return 'Error: ' . $e->getAwsErrorMessage();
+        }
+    }
 }
