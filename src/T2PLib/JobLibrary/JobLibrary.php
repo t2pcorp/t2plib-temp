@@ -398,17 +398,17 @@ class JobLibrary
         return true;
     }
     
-    public function updateJobDashboard($value, $GraphName='default'){
+    public function updateJobDashboard($value, $Matric='Monitor', $DimensionName='default'){
         $namespace = $this->jobConfig->Domain.':'.$this->jobConfig->JobID;
         $date = new \DateTime();
         $metricData = [
             [
-                'MetricName' => $GraphName,
+                'MetricName' => $Matric,
                 'Timestamp' => $date->getTimestamp(), 
                 'Dimensions' => [
                     [
-                        'Name' => 'Dimensions',
-                        'Value' => $GraphName
+                        'Name' => $Matric,
+                        'Value' => $DimensionName
                         
                     ]
                 ],
