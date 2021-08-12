@@ -424,7 +424,7 @@ class JobLibrary
             'version' => '2010-08-01'
         ]);
 
-        return $this->putMetricData($cloudWatchClient, $cloudWatchRegion, $namespace, $metricData);
+        return $this->putMetricData($cloudWatchClient, $cloudWatchRegion, $namespace, $metricData); 
     }
 
     private function putMetricData($cloudWatchClient, $cloudWatchRegion, $namespace, $metricData)
