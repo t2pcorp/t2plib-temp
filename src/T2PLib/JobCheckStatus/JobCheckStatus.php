@@ -28,7 +28,7 @@ class JobCheckStatus
 
     public static function process()
     {    
-        //Monitor Self on AWS DashBoard
+        //Monitor Self Health on AWS DashBoard 
         $jobLib = new \T2PLib\JobLibrary\JobLibrary();
         $jobLib->updateJobDashboard(100, "Success", "MonitorJobCheck", "JOBS:CheckStatus");
 
