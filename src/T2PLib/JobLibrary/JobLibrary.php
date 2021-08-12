@@ -404,7 +404,7 @@ class JobLibrary
         $metricData = [
             [
                 'MetricName' => $GraphName,
-                'Timestamp' => $date->getTimestamp(),
+                'Timestamp' => $date->getTimestamp(), 
                 'Dimensions' => [
                     [
                         'Name' => 'Dimensions',
