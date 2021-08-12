@@ -4,6 +4,8 @@ namespace T2PLib\JobLibrary;
 
 use \T2PLib\JobLibrary\JobAPI;
 use \Exception as ErrorException;
+use Aws\CloudWatch\CloudWatchClient; 
+use Aws\Exception\AwsException;
 
 class JobLibrary
 {
