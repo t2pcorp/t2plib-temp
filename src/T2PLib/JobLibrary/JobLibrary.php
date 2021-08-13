@@ -174,19 +174,19 @@ class JobLibrary
     public function setPeriodTypeDate()
     {
         return $this->jobConfigHasChange->PeriodType =
-        (($this->jobConfig->PeriodValue = 'date')? true : false);
+        (($this->jobConfig->PeriodType = 'date')? true : false);
     }
     
     public function setPeriodTypeDateMonth()
     {
         return $this->jobConfigHasChange->PeriodType =
-        (($this->jobConfig->PeriodValue = 'datemonth')? true : false);
+        (($this->jobConfig->PeriodType = 'datemonth')? true : false);
     }
     
     public function setPeriodTypeOnce()
     {
         return $this->jobConfigHasChange->PeriodType =
-        (($this->jobConfig->PeriodValue = 'once')? true : false);
+        (($this->jobConfig->PeriodType = 'once')? true : false);
     }
     
     public function setPeriodValue($value)
