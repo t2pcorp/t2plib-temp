@@ -53,21 +53,8 @@ class JobCheckStatus
             $JobConfig = json_decode($jobs_data)->JobConfig;
             $JobExecuteInfo = json_decode($jobs_data)->JobExecuteInfo;
 
-            if ($data->is_active == 'N')
+            if ($data->is_active == 'N' || $JobConfig->PeriodType == 'once' && $data->last_jobUpdate && $data->jobs_status == 'success')
             {
-                continue;
-            }
-            if ($JobConfig->PeriodType == 'once' && $data->last_jobUpdate && $data->jobs_status == 'success')
-            {
-                $now = Carbon::now($JobConfig->TimeZone);
-                $url = "$urlEnv/api/Job/updateJobCheckStatus/".$domain."/".$jobID;
-                $parameters = [
-                    "status" => 'success',
-                    "lastCheck" => $now
-                ];
-                $headers = [];
-                $method = "POST";
-                $responFromAPI = \T2P\Util\Util::MakeRequest($url, $parameters, $method, $headers);
                 continue;
             }
 
@@ -78,7 +65,7 @@ class JobCheckStatus
             $jobID = $JobConfig->JobID;
             $now = Carbon::now($JobConfig->TimeZone);
             
-            if ($status == 'fail' || !$JobConfig->AdditionCondition->Success)
+            if ($status == 'fail' || $JobConfig->AdditionCondition->Success != $JobExecuteInfo->Success || $JobExecuteInfo->Error)
             {
                 $lastNoti = Carbon::parse($data->last_notification, $JobConfig->TimeZone);
                 $notiPeriod = $lastNoti->addMinutes($JobConfig->NotiFrequency);
