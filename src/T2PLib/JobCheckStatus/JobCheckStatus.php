@@ -57,6 +57,19 @@ class JobCheckStatus
             {
                 continue;
             }
+            if ($JobConfig->PeriodType == 'once' && $data->last_jobUpdate && $data->jobs_status == 'success')
+            {
+                $now = Carbon::now($JobConfig->TimeZone);
+                $url = "$urlEnv/api/Job/updateJobCheckStatus/".$domain."/".$jobID;
+                $parameters = [
+                    "status" => 'success',
+                    "lastCheck" => $now
+                ];
+                $headers = [];
+                $method = "POST";
+                $responFromAPI = \T2P\Util\Util::MakeRequest($url, $parameters, $method, $headers);
+                continue;
+            }
 
             $job = StoreJob::store($JobConfig, $data);
             $jobObject = new JobObject($job);

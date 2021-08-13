@@ -10,7 +10,6 @@ class StoreJob
         $job->domain = $JobConfig->Domain;
         $job->job_id = $JobConfig->JobID;
         $job->last_run = $data->last_jobUpdate;
-        $job->name = $JobConfig->Name;
         $job->period_type = $JobConfig->PeriodType;
         $job->period_value = $JobConfig->PeriodValue;
         $job->schedule_time = $JobConfig->ScheduleTime;
