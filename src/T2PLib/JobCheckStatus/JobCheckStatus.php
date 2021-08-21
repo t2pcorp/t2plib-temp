@@ -6,13 +6,38 @@ use T2PLib\Job\JobObject;
 use T2PLib\Job\Notification;
 use Carbon\Carbon;
 use \T2PLib\JobCheckStatus\StoreJob;
-use \T2PLib\JobCheckStatus\CheckType;
 
 class JobCheckStatus
 {
+    private static function getEnvUrl($env) {
+        $url = "https://job-api.t2p.co.th";
+        if ($env == "LOCAL") {
+            $url = "http://localhost:7005";
+        }
+        if ($env == "DEVELOP") {
+            $url = "https://dev-job-api.t2p.co.th";
+        }
+        if ($env == "SIT") {
+            $url = "https://sit-job-api.t2p.co.th";
+        }
+        if ($env == "TEST") {
+            $url = "https://test-job-api.t2p.co.th";
+        }
+        return $url;
+    }
+
     public static function process()
-    {
-        $url = "http://localhost:7005/api/Job/getJobDataList";
+    {    
+        //Monitor Self Health on AWS DashBoard 
+        $jobLib = new \T2PLib\JobLibrary\JobLibrary();
+        $jobLib->updateJobDashboard(100, "Success", "MonitorJobCheck", "JOBS:CheckStatus");
+
+        $config = \T2P\Util\CommonConfig\Config::get("_ENV.*");
+        $env = $config->value('_ENV.NAME');
+        $env = "LOCAL";
+
+        $urlEnv = self::getEnvUrl($env);
+        $url = "$urlEnv/api/Job/getJobDataList";
         $parameters = [];
         $headers = [];
         $method = "GET";
@@ -20,13 +45,15 @@ class JobCheckStatus
         $json = json_decode(json_encode($responFromAPI));
         $result = json_decode($json->result);
 
+        $foundJobs = false;
         foreach($result as $data)
         {
+            $foundJobs = true;
             $jobs_data = $data->jobs_data;
             $JobConfig = json_decode($jobs_data)->JobConfig;
             $JobExecuteInfo = json_decode($jobs_data)->JobExecuteInfo;
 
-            if ($data->is_active == 'N')
+            if ($data->is_active == 'N' || $JobConfig->PeriodType == 'once' && $data->last_jobUpdate && $data->jobs_status == 'success')
             {
                 continue;
             }
@@ -38,7 +65,7 @@ class JobCheckStatus
             $jobID = $JobConfig->JobID;
             $now = Carbon::now($JobConfig->TimeZone);
             
-            if ($status == 'fail' || !$JobConfig->AdditionCondition->Success)
+            if ($status == 'fail' || $JobConfig->AdditionCondition->Success != $JobExecuteInfo->Success || $JobExecuteInfo->Error)
             {
                 $lastNoti = Carbon::parse($data->last_notification, $JobConfig->TimeZone);
                 $notiPeriod = $lastNoti->addMinutes($JobConfig->NotiFrequency);
@@ -52,7 +79,7 @@ class JobCheckStatus
                 $noti = new Notification($jobObject->getJobData(), $jobObject->getSchedule()->getPreviousRun(), $data->last_jobSuccess, $data->last_jobUpdate, $JobExecuteInfo->Error);
             }
                 
-            $url = "http://localhost:7005/api/Job/updateJobCheckStatus/".$domain."/".$jobID;
+            $url = "$urlEnv/api/Job/updateJobCheckStatus/".$domain."/".$jobID;
             $parameters = [
                 "status" => $status,
                 "lastCheck" => $now
@@ -60,6 +87,10 @@ class JobCheckStatus
             $headers = [];
             $method = "POST";
             $responFromAPI = \T2P\Util\Util::MakeRequest($url, $parameters, $method, $headers);
+        }
+        // if found jobs mean API work properly then just update dashboard
+        if ($foundJobs) {
+            $jobLib->updateJobDashboard(100, "Success", "MonitorAPI", "JOBS:CheckStatus");
         }
     }
 }

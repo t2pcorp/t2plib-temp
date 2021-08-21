@@ -3,10 +3,6 @@
 namespace T2PLib\Job;
 
 include_once('/data/_inc/___cmd_inc.php');
-// define('LINE_TOKEN', "1lDrmb5TkZZgWimvPc3C261n600xL5WZLs0DaH3t3fc"); //intern
-define('LINE_TOKEN', "zpcYQ3bPB7hs3oFDM5pcHlKG1q0d3hhHX2johuEnpFJ"); //local
-// internRoom:1lDrmb5TkZZgWimvPc3C261n600xL5WZLs0DaH3t3fc
-// localTest:zpcYQ3bPB7hs3oFDM5pcHlKG1q0d3hhHX2johuEnpFJ
 
 class Notification
 {
@@ -49,7 +45,7 @@ class Notification
             switch($type)
             {
                 case 'Line':
-                    \T2P\Util\Util::sendNotiLineWithPeriod($this->jobData->getJobID() . ':' . LINE_TOKEN,
+                    \T2P\Util\Util::sendNotiLineWithPeriod($this->jobData->getJobID() . ':' . $address,
                      $msgToNotify, true, $hours=0, $minutes=0, $seconds=1);
                     break;
                 case 'sms':
