@@ -110,6 +110,18 @@ class T2PAuthentication
         $enc['encrypted']=$encrypted;
         return $enc;
     }
+    
+    /**
+     * @param $encrypted
+     * @param $encryption_key
+     * @return string
+     */
+    private function decryptAES256CBC($encrypted, $encryption_key)
+    {
+        $keys = preg_split("/:/", $encryption_key);
+        $decrypted = openssl_decrypt($encrypted, 'aes-256-cbc', base64_decode(@$keys[0]), 0, base64_decode(@$keys[1]));
+        return $decrypted;
+    }
   
     /**
      * parse key info from key contents
@@ -118,14 +130,14 @@ class T2PAuthentication
      */
     private function extractKey($pem_keys)
     {
-        if (!isset($this->keys)) {
+        // if (!isset($this->keys)) {
             $keys=preg_split("/:/", $pem_keys);
             $this->keys['clientCode']=$keys[0];
             $this->keys['keyCode']=$keys[1];
             $this->keys['hmacKey']=$keys[2];
             $this->keys['publicKey']=$keys[3];
             $this->keys['privateKey']=$keys[4];
-        }
+        // }
         return $this->keys;
     }
   
