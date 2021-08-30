@@ -1,0 +1,121 @@
+<?php 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+include_once "T2PAuthentication.php";
+include_once "T2PAuthenException.php";
+
+use \T2PLib\T2PAuthen\T2PAuthenException;
+use \T2PLib\T2PAuthen\T2PAuthentication;
+
+$clientKey = "
+CLI100003
+:
+KC1000020
+:
+6MTkjsiy7E79EuNk+5OrwO++PLg5w0qYp9R+BuYvx9LV0LZchQCnuvFV1WiAD+BdJX5ole4w8SQzXt6pGxVwkJA9D5TsedcF1gn3J2gMDTuRA/JiHwIW41oMu+N4PGtiHSfj3NqV7rqzLp8wc7xq4V77mRFHE87fcAx40u+/NCY=
+:
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiiI/CI6c0bvqd/yuJSeD
+kcMtEJISBR6JxTxvhOhWBVsikS109TTMJCsSQaySzwcllw7G72JJwP0fTSCurzQE
+h0AOmBiv4BdsLfo9ynvbtYIKzxc+QLlnZ0aT128UvrhVa1Ay8wHp9MAi2ecBDa2i
+/g87jbDVaKny4eRRyWff0RWPlBTA/dBPTwA54uwZBNLSs4TfxWAxU/6O3+44kNU0
+oMNgNWQwcubVWmnRMUVXvjQOwpWMDke+YgHNP1CPoI+isok8oDJx84Fd1TvD42qp
+gTgRPCyb6+WYO/Y+oXErjLwpa+8Bo52hufH7ydeQawcNodEEjrof4JdyO81z9Id1
+VwIDAQAB
+-----END PUBLIC KEY-----
+:
+-----BEGIN RSA PRIVATE KEY-----
+MIIEowIBAAKCAQEAz+y5K75qq20Jdi4sBSnxPNY9NT5odSeCkQQgskGG6dqKomWP
+AVxKSDllJSfg78/CvyP9Z7IDsxHEjzsfZx9JxryylJa0CpJdMTmWzr7HYIvlE4w8
+Wm0Q+SLlB/CLDFQOt5n8AaEBB+J3D19Lhg4cz2Cgz0zbp6aUVvvDXT4RbpLBOAWG
+VDBAPJoqVJZk022v1MhEY/vjXNpABRgcuZPLkYcepgaBfvCeIPkWY4xcnsX3Iapa
+RWMSr/qflcN47+aqWgrM4loHej9CUD6Op/J5l9iyun0EGdd1ZORetYmlc45x8nu4
+ZRAkZnffXxBvldV9+oS12n4iYhPcc6SNFNHcpwIDAQABAoIBAEqWqx6sImv4o4pH
+qfb4QtgGKtLs3mAYmlgXWPtZUmKVyWHUeOaOCv+5xzT7B1BAAaa77G3EiFs2poKT
+PQKrULYAfzeakF+yfcfo1ta3zaIuzTCkAAqYUZxuDic4/Uig5t6qWKLk9Q+1B+z1
+zIv8iA1Epqt28N1FfrVtf3n1iB9X0646XsvgRWhtUGLKgoD5tF2GMvQqlSrBbtzj
+xpqVSsmeYhBx1Q9orx28dCxIFKhz0DGNyy29VWm63QjiFAIvykeh8PVwqugGE2wv
+DxaRv/zij74twLPnnOa91l+5xzBwXWm8JEmhz3qBklMjbImq/gs4HIGsZbhXkt19
+xOj4IAECgYEA/qj+VK7khBsfRnY9otGwoabJD2xz9IOD3HAD4RVdYlR77Vc8chop
+Zm6VNk9IwcRpIn5zU9NFRSwPYlIud/J1e/1gStfiAcX23cBwfshAbhdx5/gDgTKM
+//q4Um0Lvjgl8s48CRcREUSmOpfbid5iotDay2A92tiO9B+fe6G/ZKcCgYEA0QTH
+8Ibh1iBGPnEkaUn5R1VdhaZ6e0I8QnRckChn61SB84lUYJypyjFRGouEeKJNDmvg
+lJh7zkQVrR5OzcPtvvlVlth4f2RY0caBhTew7Z2DP74rCSWHYnbLlMrPO+cF/xub
+lmo4NUE2GKw5+aGtAaRhgdY1qIzLJm1n744QyAECgYAXTYWAYESe5hB1lSpMtN1x
+3V42oBj4PfSZ/lIMjbTu44Y3kK0CT+yL6ACVaKniuUNZmbKZ8BI9oyuBNr3z0eb4
+QpZGIv0WZnQRlKN2poJm0JRmwqYnc2W9osatHDdf36lxT3fk6QxxxRNk9zJqqkPi
+XDQ5OgRO+1QReLdSS9nErwKBgQC2y8qcBSpOnK0yALsKRcJ3ayW+M8kcMOIIcEFf
+Zab0fVSlCu47C+fFx3mZkHiLE832FcwzyGNGEe8vFrluZLJweRgsMya2qqiu1T8C
+paDbPgzB22tBtYuARkpm1zODvNhWsetREZYUpPJNg5m0QnvOWtdXuGH3BSLJeZcT
+PxhYAQKBgDr/qPXiHJW//CyWsxxaVdrQRwxIz6xTGFjxuJMVT9E5J/95k8lg0CRe
+fdguDVjVcsGo0EjpUKAajxtkxWSg9y0O+1Vy56RTLI+WjSLoiCsnK0ryvdPaNN3U
+6OYFRc4ciXO8SevjJV8Srdap/dhzEFMNKm80/dhO98eM+mqWGN9p
+-----END RSA PRIVATE KEY-----
+";
+$serverKey = '
+CLI100003
+:
+KC1000020
+:
+6MTkjsiy7E79EuNk+5OrwO++PLg5w0qYp9R+BuYvx9LV0LZchQCnuvFV1WiAD+BdJX5ole4w8SQzXt6pGxVwkJA9D5TsedcF1gn3J2gMDTuRA/JiHwIW41oMu+N4PGtiHSfj3NqV7rqzLp8wc7xq4V77mRFHE87fcAx40u+/NCY=
+:
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAz+y5K75qq20Jdi4sBSnx
+PNY9NT5odSeCkQQgskGG6dqKomWPAVxKSDllJSfg78/CvyP9Z7IDsxHEjzsfZx9J
+xryylJa0CpJdMTmWzr7HYIvlE4w8Wm0Q+SLlB/CLDFQOt5n8AaEBB+J3D19Lhg4c
+z2Cgz0zbp6aUVvvDXT4RbpLBOAWGVDBAPJoqVJZk022v1MhEY/vjXNpABRgcuZPL
+kYcepgaBfvCeIPkWY4xcnsX3IapaRWMSr/qflcN47+aqWgrM4loHej9CUD6Op/J5
+l9iyun0EGdd1ZORetYmlc45x8nu4ZRAkZnffXxBvldV9+oS12n4iYhPcc6SNFNHc
+pwIDAQAB
+-----END PUBLIC KEY-----
+:
+-----BEGIN RSA PRIVATE KEY-----
+MIIEowIBAAKCAQEAiiI/CI6c0bvqd/yuJSeDkcMtEJISBR6JxTxvhOhWBVsikS10
+9TTMJCsSQaySzwcllw7G72JJwP0fTSCurzQEh0AOmBiv4BdsLfo9ynvbtYIKzxc+
+QLlnZ0aT128UvrhVa1Ay8wHp9MAi2ecBDa2i/g87jbDVaKny4eRRyWff0RWPlBTA
+/dBPTwA54uwZBNLSs4TfxWAxU/6O3+44kNU0oMNgNWQwcubVWmnRMUVXvjQOwpWM
+Dke+YgHNP1CPoI+isok8oDJx84Fd1TvD42qpgTgRPCyb6+WYO/Y+oXErjLwpa+8B
+o52hufH7ydeQawcNodEEjrof4JdyO81z9Id1VwIDAQABAoIBABk2av7q2ODHReKk
+sjyB29ftIfqWTse0bT0c7NX7ekf7/HE3NNPU0TYAzpJCJ4G2MjxCLDlhXUjmaqIv
+RvMfsXvmS0OjreZfIBW8SS7+MHoOxF5MRcaWkLMfBLkbw1OUXbL6rnIAdW2A7FuN
+eHnAqbFpolsYXbt+2aA1hmAWn5mP6uIBaY5Owfrx9wd3Lhh/n9eRJpVSaqE65x2q
+zATxEW5AtiYYImOkjot4cxS0wHgfAF1MG+1WWzfoM3Bj+Y6wJvbPl08byuwW/kmn
+8HA1f3VUTbHpbXL4CMlGag2h4E1QjJF7MUTorzbD/J1I1Mxrx1WTpT3YhSMHvrK4
+XCMZ+GECgYEA0K07a6qpdHd6rXkAc/LxnDj5Ue5o7GHoBrxGuNAZP5R+Szs1UjLm
+6xJ117sAcFpOJnuluOlhPmXtWBqEGeJ1MzGjw4AkIcI0NHf8iSCIo51cHlBcs3Nc
+l/VzlYyqcaPii2VgJjdtUF8w7pRQDzhkxWGyuFyu/lrOIR8fkWVu3N8CgYEAqXWh
+fF3NhT5rWqWgBc9JFiM1FyOabq90eajxNg2VbWEkwfdwC6r8JQFO3+JkH9PhRji3
+YqEFTj4tz3yORPoIVnGPseilcnrLa4XGnGPSEJ2gN8kIYLyPFZAawEdprPUzogFt
+SLy+VTfuIrYed16JYGeak+ZqxdmTAbQ4Hiay/okCgYArpdBj+NJw9fzHBCRAHHTF
+BHXB2WhA6Umq/v6b8YsWbWztN3kztEnwqW/Uq9yvo3PtQLetMcORVaiLYSB4eZGi
+H6PtZIQqO4DH6MD9vbxW3LdD7/Mz5dFcR47hnQaZtnnQRmgSFk3bHc4SWRtV06ng
+T0senORNd5jd/LCRrPG/aQKBgQCFPH+jkP0ubk1qEB8pcjk8tqHfd5bMwBcMMNC2
+dyetwFtuRmZKRj3JuqWRUib2/1h4Jc/KNGA/jJPoNz6E7THxBYi9kPXEdNfLynrG
+K5XWipiWQ/HaXWcCxTLDS2LDImdeUVDjh8L+reMGV7rMj//jVJItB1WcCd2T0Wbu
+De9eQQKBgGvDd7rBV9aUP4jYVum//d1mO59lUP1ItKkD+s4OitPFMs05ntZu2t+h
+cMRPENda8ViXp5jJlAjG7SYJApqQ9oF28EZl8kohOanX0a9UYIAChT6Y7Rr3imVm
+mr6O0A5zMjJh4PVx542vmiaOKp3YdlTEcGMyrqwPaZhGH9ZoDjwR
+-----END RSA PRIVATE KEY-----
+';
+
+
+
+$lib = new T2PAuthentication();
+
+$encryptedFromGOLANG = 'Ki8u6AswrU3l+Lg3GBQffBo9Dk3YviIaeF47Du/qZIE5JfJNqP9i/Tf6HS4p/3uwDb3GTtPpOZ2XQ4IGvPtmEntr73nGiKS5KL6csDbRJYxeytE6/O1yh2PwYv3yu2347smGfJNBOeXvucBLQG6fuYjUqSxmcVQKKf42zo6njSk8GXRtugXY7UayUfUloci1W3UGEDQ22CFIO3tD4OCwp5V1qpp+zEIIGqe+fgbiZUoggqUVWEY3I9VsTWoDt6L3RTJutyFZK8FcMYr2S0Xxg78w2gJyqytG32a3rr8PXUMzUhKzYG2OSMOXH4T67bbrZyYikpRMlXcshBQIKfArUQ==:RW8jkxj7jhM0nlZJ47jJDF6cFuEJh8LuZwKPG68nphmA2S33XtPzsSd9bPuDOIG2cSI7vFRsYOhzbUpUi2H16A==';
+$encryptedFromNodeJS = 'fYOyL++Dx9L0oQNaumchdmFeyVdyGiGEOpHUmA0vY7wllVC3e438rJXc3pUTV3lRvMNhjm/pX2sXSvTxXNk+m63BHbMQlL/YcPAAEwCXPcefWqDKSotTiOPLSUf34QFBHVpwgjkQYZ85OyPO/GaPw3vHjDGYmNcDTFrXix8VL4qOpd2zGJPi0nUVTeE7bVUEuF+BN1suBlTse4Znh+yXfGy5jOJvTUw4FbLw5dhN0BOFtzgFHEzu2arOGJLIEZ6qtOTLikbjEo3TGlaAQYwIOT6MpLs1yrYn3NF8i7F7Vc/faGcc/luy5KgLsUUykHhfF1tP6aA+wqYkpKHY++WA2g==:ztV1JwFogHj/4g7pfL0kBT5czD5sCEA0VT5+a1PyTSCYlTNbISnRyEejNCBpr6d2/UXazKxEj0/zcvUkvWQnWA==';
+$plainText = 'This is plain Text {"Test":"Encrypt"} ทดสอบ';
+
+
+$encryptedText = $lib->encryptData($plainText, $clientKey);
+$decryptedTxtPHP = $lib->decryptData($encryptedText, $serverKey);
+$decryptTextGO = $lib->decryptData($encryptedFromGOLANG, $serverKey);
+$decryptTextNodeJs = $lib->decryptData($encryptedFromNodeJS, $serverKey);
+
+echo "original: $plainText\n";
+echo "encrypted: $encryptedText\n";
+echo "decryptPHP: $decryptedTxtPHP\n";
+echo "decryptGO: $decryptTextGO\n";
+echo "decryptNodeJS: $decryptTextNodeJs\n";
