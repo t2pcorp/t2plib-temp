@@ -104,7 +104,7 @@ class JobCheckStatus
                 "status" => $status,
                 "lastCheck" => $now
             ];
-            $headers = [];
+            $headers = ['Authorization: Bearer '. $token];
             $method = "POST";
             $responFromAPI = \T2P\Util\Util::MakeRequest($url, $parameters, $method, $headers);
         }
