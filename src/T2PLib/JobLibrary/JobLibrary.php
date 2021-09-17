@@ -192,7 +192,8 @@ class JobLibrary
     
     public function setSkipCheck($skip)
     {
-        return (($this->jobConfig->SkipCheck = $skip)? true : false);
+        return $this->jobConfigHasChange->SkipCheck =
+        (($this->jobConfig->SkipCheck = $skip)? true : false);
     }
     
     public function setLINENotification($lineToken)
@@ -269,7 +270,7 @@ class JobLibrary
         $config->JobExecuteInfo = $this->jobExecuteInfo;
         $config = json_encode($config);
 
-        return JobAPI::getJobActiveStatus($domain, $jobID, $config, $this->env);
+        return JobAPI::getJobActiveStatus($domain, $jobID, $user, $config, $this->env);
     }
 
     public function updateJobStatus($errorMessage = '')
@@ -292,7 +293,7 @@ class JobLibrary
         $config->JobExecuteInfo = $this->jobExecuteInfo;
         $config = json_encode($config);
 
-        JobAPI::updateJobStatus($config, $this->env);
+        JobAPI::updateJobStatus($user, $config, $this->env);
     }
 
     public function updateJobRunningStatus()
@@ -314,7 +315,7 @@ class JobLibrary
             return;
         }
         
-        JobAPI::updateJobRunningStatus($domain, $jobID, $this->env);
+        JobAPI::updateJobRunningStatus($domain, $jobID, $user, $this->env);
     }
 
     public function checkData()

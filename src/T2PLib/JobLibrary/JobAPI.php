@@ -21,7 +21,7 @@ class JobAPI
         return $url;
     }
 
-    private static function getToken() {
+    private static function getToken($user) {
         $config = \T2P\Util\CommonConfig\Config::get("_ENV.*");
         $env = $config->value('_ENV.NAME');
         $env = "LOCAL";
@@ -29,8 +29,8 @@ class JobAPI
         $urlEnv = self::getEnvUrl($env);
         $url = "$urlEnv/api/login";
         $parameters = [
-            'email' => 'test@example.com',
-            'password' => '123456789'
+            'email' => $user->email,
+            'password' => $user->password
         ];
         $headers = [];
         $method = "POST";
@@ -40,9 +40,9 @@ class JobAPI
         return $result->token;
     }
 
-    public static function getJobActiveStatus($domain, $jobID, $job, $env)
+    public static function getJobActiveStatus($domain, $jobID, $user, $job, $env)
     {
-        $token = self::getToken();
+        $token = self::getToken($user);
         $url = self::getEnvUrl($env);
         $url = "$url/api/Job/getJobStatus/".$domain."/".$jobID;
         $parameters = $job;
@@ -57,9 +57,9 @@ class JobAPI
         return $responFromAPI;
     }
 
-    public static function updateJobStatus($job, $env)
+    public static function updateJobStatus($user, $job, $env)
     {
-        $token = self::getToken();
+        $token = self::getToken($user);
         $url = self::getEnvUrl($env);
         $url = "$url/api/Job/updateJobStatus";
         $parameters = $job;
@@ -71,9 +71,9 @@ class JobAPI
         $responFromAPI = \T2P\Util\Util::MakeRequest($url, $parameters, $method, $headers);
     }
 
-    public static function updateJobRunningStatus($domain, $jobID, $env)
+    public static function updateJobRunningStatus($domain, $jobID, $user, $env)
     {
-        $token = self::getToken();
+        $token = self::getToken($user);
         $url = self::getEnvUrl($env);
         $url = "$url/api/Job/updateJobRunningStatus/".$domain."/".$jobID;
         $parameters = [
