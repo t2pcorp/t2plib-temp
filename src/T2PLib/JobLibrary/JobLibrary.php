@@ -9,11 +9,11 @@ use Aws\Exception\AwsException;
 
 class JobLibrary
 {
+    public $user;
     public $jobConfig;
     public $jobExecuteInfo;
     public $env;
-    public $jobConfigHasChange;
-    public $jobExecuteInfoHasChange;
+    public $notificationHasSet;
 
     public function __construct() {
         $config = \T2P\Util\CommonConfig\Config::get("_ENV.*");
@@ -21,6 +21,10 @@ class JobLibrary
         $this->env = $config->value('_ENV.NAME');
         $this->env = "LOCAL";
 
+        $this->user = (object) [
+            'email' => null,
+            'password' => null
+        ];
         $this->jobConfig = (object) [
             'Domain' => null,
             'JobID' => null,
@@ -48,27 +52,7 @@ class JobLibrary
             'Success' => true,
             'Error' => null
         ];
-
-        $this->jobConfigHasChange = (object) [
-            'Domain' => false,
-            'JobID' => false,
-            'Name' => false,
-            'PeriodType' => false,
-            'PeriodValue' => false,
-            'ScheduleTime' => false,
-            'ExecuteDuration' => false,
-            'TimeZone' => false,
-            'AdditionCondition' => false,
-            'SkipCheck' => false,
-            'Notification' => false,
-            'NotiFrequency' => false,
-            'ArchiveLogUnit' => false,
-            'ArchiveLogValue' => false
-        ];
-        $this->jobExecuteInfoHasChange = (object) [
-            'Success' => false,
-            'Error' => false
-        ];
+        $this->notificationHasSet = null;
     }
 
     public function getDomain()
@@ -143,146 +127,122 @@ class JobLibrary
     
     public function setDomain($domain)
     {
-        return $this->jobConfigHasChange->Domain =
-        (($this->jobConfig->Domain = $domain)? true : false);
+        return (($this->jobConfig->Domain = $domain)? true : false);
     }
     
     public function setJobID($jobID)
     {
-        return $this->jobConfigHasChange->JobID =
-        (($this->jobConfig->JobID = $jobID)? true : false);
+        return (($this->jobConfig->JobID = $jobID)? true : false);
     }
     
     public function setName($name)
     {
-        return $this->jobConfigHasChange->Name =
-        (($this->jobConfig->Name = $name)? true : false);
+        return (($this->jobConfig->Name = $name)? true : false);
     }
     
     public function setPeriodTypeMin()
     {
-        return $this->jobConfigHasChange->PeriodType =
-        (($this->jobConfig->PeriodType = 'min')? true : false);
+        return (($this->jobConfig->PeriodType = 'min')? true : false);
     }
     
     public function setPeriodTypeDaily()
     {
-        return $this->jobConfigHasChange->PeriodType =
-        (($this->jobConfig->PeriodType = 'daily')? true : false);
+        return (($this->jobConfig->PeriodType = 'daily')? true : false);
     }
     
     public function setPeriodTypeDate()
     {
-        return $this->jobConfigHasChange->PeriodType =
-        (($this->jobConfig->PeriodType = 'date')? true : false);
+        return (($this->jobConfig->PeriodType = 'date')? true : false);
     }
     
     public function setPeriodTypeDateMonth()
     {
-        return $this->jobConfigHasChange->PeriodType =
-        (($this->jobConfig->PeriodType = 'datemonth')? true : false);
+        return (($this->jobConfig->PeriodType = 'datemonth')? true : false);
     }
     
     public function setPeriodTypeOnce()
     {
-        return $this->jobConfigHasChange->PeriodType =
-        (($this->jobConfig->PeriodType = 'once')? true : false);
+        return (($this->jobConfig->PeriodType = 'once')? true : false);
     }
     
     public function setPeriodValue($value)
     {
-        return $this->jobConfigHasChange->PeriodValue =
-        (($this->jobConfig->PeriodValue = $value)? true : false);
+        return (($this->jobConfig->PeriodValue = $value)? true : false);
     }
     
     public function setScheduleTime($scheduleTime)
     {
-        return $this->jobConfigHasChange->ScheduleTime =
-        (($this->jobConfig->ScheduleTime = $scheduleTime)? true : false);
+        return (($this->jobConfig->ScheduleTime = $scheduleTime)? true : false);
     }
     
     public function setExecuteDuration($executeDuration)
     {
-        return $this->jobConfigHasChange->ExecuteDuration =
-        (($this->jobConfig->ExecuteDuration = $executeDuration)? true : false);
+        return (($this->jobConfig->ExecuteDuration = $executeDuration)? true : false);
     }
     
     public function setTimeZone($timeZone)
     {
-        return $this->jobConfigHasChange->TimeZone =
-        (($this->jobConfig->TimeZone = $timeZone)? true : false);
+        return (($this->jobConfig->TimeZone = $timeZone)? true : false);
     }
     
     public function setAdditionCondition($success)
     {
-        return $this->jobConfigHasChange->AdditionCondition =
-        (($this->jobConfig->AdditionCondition['Success'] = $success)? true : false);
+        return (($this->jobConfig->AdditionCondition['Success'] = $success)? true : false);
     }
     
     public function setSkipCheck($skip)
     {
-        return $this->jobConfigHasChange->SkipCheck =
-        (($this->jobConfig->SkipCheck = $skip)? true : false);
+        return (($this->jobConfig->SkipCheck = $skip)? true : false);
     }
     
     public function setLINENotification($lineToken)
     {
-        return $this->jobConfigHasChange->Notification =
-        (($this->jobConfig->Notification['Line'] = $lineToken)? true : false);
+        return $this->notificationHasSet = (($this->jobConfig->Notification['Line'] = $lineToken)? true : false);
     }
     
     public function setSMSNotification($phoneNumber)
     {
-        return $this->jobConfigHasChange->Notification = 
-        (($this->jobConfig->Notification['sms'] = $phoneNumber)? true : false);
+        return $this->notificationHasSet = (($this->jobConfig->Notification['sms'] = $phoneNumber)? true : false);
     }
     
     public function setPhoneNotification($phoneNumber)
     {
-        return $this->jobConfigHasChange->Notification =
-        (($this->jobConfig->Notification['call'] = $phoneNumber)? true : false);
+        return $this->notificationHasSet = (($this->jobConfig->Notification['call'] = $phoneNumber)? true : false);
     }
     
     public function setMailNotification($mail)
     {
-        return $this->jobConfigHasChange->Notification =
-        (($this->jobConfig->Notification['mail'] = $mail)? true : false);
+        return $this->notificationHasSet = (($this->jobConfig->Notification['mail'] = $mail)? true : false);
     }
     
     public function setNotiFrequency($frequency)
     {
-        return $this->jobConfigHasChange->NotiFrequency =
-        (($this->jobConfig->NotiFrequency = $frequency)? true : false);
+        return (($this->jobConfig->NotiFrequency = $frequency)? true : false);
     }
     
     public function setArchiveLogUnitDay()
     {
-        return $this->jobConfigHasChange->ArchiveLogUnit =
-        (($this->jobConfig->ArchiveLogUnit = 'D')? true : false);
+        return (($this->jobConfig->ArchiveLogUnit = 'D')? true : false);
     }
     
     public function setArchiveLogUnitMonth()
     {
-        return $this->jobConfigHasChange->ArchiveLogUnit =
-        (($this->jobConfig->ArchiveLogUnit = 'M')? true : false);
+        return (($this->jobConfig->ArchiveLogUnit = 'M')? true : false);
     }
     
     public function setArchiveLogValue($value)
     {
-        return $this->jobConfigHasChange->ArchiveLogValue =
-        (($this->jobConfig->ArchiveLogValue = $value)? true : false);
+        return (($this->jobConfig->ArchiveLogValue = $value)? true : false);
     }
     
     public function setSuccess($success)
     {
-        return $this->jobExecuteInfoHasChange->Success =
-        (($this->jobExecuteInfo->Success = $success)? true : false);
+        return (($this->jobExecuteInfo->Success = $success)? true : false);
     }
     
     public function setError($message)
     {
-        return $this->jobExecuteInfoHasChange->Error =
-        (($this->jobExecuteInfo->Error = $message)? true : false);
+        return (($this->jobExecuteInfo->Error = $message)? true : false);
     }
 
     public function getJobActiveStatus()
@@ -383,7 +343,7 @@ class JobLibrary
         if ($this->jobConfig->TimeZone == null) {
             throw new ErrorException('error property TimeZone need to assigned.');
         }
-        if ($this->jobConfigHasChange->Notification == false) {
+        if ($this->notificationHasSet == false) {
             throw new ErrorException('error property Notification need to assigned.');
         }
         if ($this->jobConfig->NotiFrequency == null) {
