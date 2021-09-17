@@ -26,7 +26,7 @@ class JobCheckStatus
         return $url;
     }
 
-    private static function getToken() {
+    private static function getToken($email, $password) {
         $config = \T2P\Util\CommonConfig\Config::get("_ENV.*");
         $env = $config->value('_ENV.NAME');
         $env = "LOCAL";
@@ -34,8 +34,8 @@ class JobCheckStatus
         $urlEnv = self::getEnvUrl($env);
         $url = "$urlEnv/api/login";
         $parameters = [
-            'email' => 'test@example.com',
-            'password' => '123456789'
+            'email' => $email,
+            'password' => $password
         ];
         $headers = [];
         $method = "POST";
@@ -50,13 +50,15 @@ class JobCheckStatus
         //Monitor Self Health on AWS DashBoard 
         $jobLib = new \T2PLib\JobLibrary\JobLibrary();
         $jobLib->updateJobDashboard(100, "Success", "MonitorJobCheck", "JOBS:CheckStatus");
+        $email = readline('Email: ');
+        $password = readline('Password: ');
 
         $config = \T2P\Util\CommonConfig\Config::get("_ENV.*");
         $env = $config->value('_ENV.NAME');
         $env = "LOCAL";
 
         $urlEnv = self::getEnvUrl($env);
-        $token = self::getToken();
+        $token = self::getToken($email, $password);
         $url = "$urlEnv/api/Job/getJobDataList";
         $parameters = [];
         $headers = ['Authorization: Bearer '. $token];
