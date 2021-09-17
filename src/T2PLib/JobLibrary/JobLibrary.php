@@ -320,6 +320,12 @@ class JobLibrary
 
     public function checkData()
     {
+        if ($this->user->email == null) {
+            throw new ErrorException('property email need to assigned.');
+        }
+        if ($this->user->password == null) {
+            throw new ErrorException('property password need to assigned.');
+        }
         if ($this->jobConfig->Domain == null) {
             throw new ErrorException('property Domain need to assigned.');
         }
