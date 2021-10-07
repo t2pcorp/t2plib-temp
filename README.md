@@ -87,3 +87,8 @@ stdClass Object
     $job->updateJobStatus("Error Message"); // Done with Failed Update
 
 ```
+
+# Jobs API Create Authen User
+```
+    php artisan user:register test1 test1@email.com password
+```
