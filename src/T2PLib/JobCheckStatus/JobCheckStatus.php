@@ -45,12 +45,12 @@ class JobCheckStatus
         return $result->token;
     }
 
-    public static function process()
+    public static function process($email, $password)
     {
         //Monitor Self Health on AWS DashBoard 
         $jobLib = new \T2PLib\JobLibrary\JobLibrary();
         $jobLib->updateJobDashboard(100, "Success", "MonitorJobCheck", "JOBS:CheckStatus");
-        list($email, $password) = explode(' ', readline());
+        // list($email, $password) = explode(' ', readline());
 
         $config = \T2P\Util\CommonConfig\Config::get("_ENV.*");
         $env = $config->value('_ENV.NAME');
