@@ -67,7 +67,9 @@ stdClass Object
     use \T2PLib\JobLibrary\JobLibrary;
 
     $job = new JobLibrary();
-
+    
+    $job->setEmail("auth@email.com");
+    $job->setPassword("PasswodAuthen");
     $job->setDomain('EXAMPLE');
     $job->setJobID('EXAMPLE001');
     $job->setName('Example Name');

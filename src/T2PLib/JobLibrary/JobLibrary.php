@@ -124,7 +124,17 @@ class JobLibrary
     {
         return $this->jobConfig->ArchiveLogValue;
     }
-    
+        
+    public function setEmail($email)
+    {
+        return (($this->user->email = $email)? true : false);
+    }    
+        
+    public function setPassword($password)
+    {
+        return (($this->user->password = $password)? true : false);
+    }
+
     public function setDomain($domain)
     {
         return (($this->jobConfig->Domain = $domain)? true : false);
@@ -270,7 +280,7 @@ class JobLibrary
         $config->JobExecuteInfo = $this->jobExecuteInfo;
         $config = json_encode($config);
 
-        return JobAPI::getJobActiveStatus($domain, $jobID, $user, $config, $this->env);
+        return JobAPI::getJobActiveStatus($domain, $jobID, $this->user, $config, $this->env);
     }
 
     public function updateJobStatus($errorMessage = '')
@@ -293,7 +303,7 @@ class JobLibrary
         $config->JobExecuteInfo = $this->jobExecuteInfo;
         $config = json_encode($config);
 
-        JobAPI::updateJobStatus($user, $config, $this->env);
+        JobAPI::updateJobStatus($this->user, $config, $this->env);
     }
 
     public function updateJobRunningStatus()
@@ -315,7 +325,7 @@ class JobLibrary
             return;
         }
         
-        JobAPI::updateJobRunningStatus($domain, $jobID, $user, $this->env);
+        JobAPI::updateJobRunningStatus($domain, $jobID, $this->user, $this->env);
     }
 
     public function checkData()
