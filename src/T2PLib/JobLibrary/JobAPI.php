@@ -24,7 +24,6 @@ class JobAPI
     private static function getToken($user) {
         $config = \T2P\Util\CommonConfig\Config::get("_ENV.*");
         $env = $config->value('_ENV.NAME');
-        $env = "LOCAL";
 
         $urlEnv = self::getEnvUrl($env);
         $url = "$urlEnv/api/login";
