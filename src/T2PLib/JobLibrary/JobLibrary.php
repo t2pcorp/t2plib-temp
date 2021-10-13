@@ -399,7 +399,7 @@ class JobLibrary
 
         $cloudWatchRegion = 'ap-southeast-1';
         $cloudWatchClient = new CloudWatchClient([
-            'profile' => 'default',
+            // 'profile' => 'default',
             'region' => $cloudWatchRegion,
             'version' => '2010-08-01'
         ]);
