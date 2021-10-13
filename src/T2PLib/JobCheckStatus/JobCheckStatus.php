@@ -29,7 +29,7 @@ class JobCheckStatus
     private static function getToken($email, $password) {
         $config = \T2P\Util\CommonConfig\Config::get("_ENV.*");
         $env = $config->value('_ENV.NAME');
-        $env = "LOCAL";
+        // $env = "LOCAL";
 
         $urlEnv = self::getEnvUrl($env);
         $url = "$urlEnv/api/login";
@@ -54,7 +54,7 @@ class JobCheckStatus
 
         $config = \T2P\Util\CommonConfig\Config::get("_ENV.*");
         $env = $config->value('_ENV.NAME');
-        $env = "LOCAL";
+        // $env = "LOCAL";
 
         $urlEnv = self::getEnvUrl($env);
         $token = self::getToken($email, $password);
