@@ -6,7 +6,7 @@
    composer require t2pcorp/t2plib
 ```
 
-## example
+## How to Generate Toke Type H to use for Host to Host request
 ```
 <?php
     ini_set('display_errors', 1);
@@ -54,6 +54,36 @@ stdClass Object
         )
 
 )
+```
+
+
+## How to request for token type C for client use (Mobile/Web)
+
+```
+    1. on the server generate token type H for host to host with fix uri input (/authen/v1/clientToken/generate) of the request token
+    2. use token that recieve post to request token to url : https://test-api-authen.t2p.co.th/authen/v1/clientToken/generate
+```
+
+
+
+# Decrypt the response from Host to Host request
+
+```
+
+<?php
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+
+    require_once 'vendor/autoload.php';
+
+    $auth = new T2PLib\T2PAuthen\T2PAuthentication();
+    $clientKey = file_get_contents("./client-key-from-T2P.txt");     //Client Key from T2P
+
+    //Make request to Host to Host and get the response here
+
+    $result = $auth->decryptData($enc_message, $clientKey); 
+    print_r($result);
 ```
 
 # JobLibrary (Internal)
