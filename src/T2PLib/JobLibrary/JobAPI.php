@@ -21,12 +21,34 @@ class JobAPI
         return $url;
     }
 
-    public static function getJobActiveStatus($domain, $jobID, $job, $env)
+    private static function getToken($user) {
+        $config = \T2P\Util\CommonConfig\Config::get("_ENV.*");
+        $env = $config->value('_ENV.NAME');
+
+        $urlEnv = self::getEnvUrl($env);
+        $url = "$urlEnv/api/login";
+        $parameters = [
+            'email' => $user->email,
+            'password' => $user->password
+        ];
+        $headers = [];
+        $method = "POST";
+        $responFromAPI = \T2P\Util\Util::MakeRequest($url, $parameters, $method, $headers);
+        $json = json_decode(json_encode($responFromAPI));
+        $result = json_decode($json->result);
+        return $result->token;
+    }
+
+    public static function getJobActiveStatus($domain, $jobID, $user, $job, $env)
     {
+        $token = self::getToken($user);
         $url = self::getEnvUrl($env);
         $url = "$url/api/Job/getJobStatus/".$domain."/".$jobID;
         $parameters = $job;
-        $headers = ['Content-Type: application/json'];
+        $headers = [
+            'Content-Type: application/json',
+            'Authorization: Bearer '. $token
+        ];
         $method = "POST";
         $responFromAPI = \T2P\Util\Util::MakeRequest($url, $parameters, $method, $headers);
         $json = json_decode(json_encode($responFromAPI));
@@ -34,24 +56,31 @@ class JobAPI
         return $responFromAPI;
     }
 
-    public static function updateJobStatus($job, $env)
+    public static function updateJobStatus($user, $job, $env)
     {
+        $token = self::getToken($user);
         $url = self::getEnvUrl($env);
         $url = "$url/api/Job/updateJobStatus";
         $parameters = $job;
-        $headers = ['Content-Type: application/json'];
+        $headers = [
+            'Content-Type: application/json',
+            'Authorization: Bearer '. $token
+        ];
         $method = "POST";
         $responFromAPI = \T2P\Util\Util::MakeRequest($url, $parameters, $method, $headers);
     }
 
-    public static function updateJobRunningStatus($domain, $jobID, $env)
+    public static function updateJobRunningStatus($domain, $jobID, $user, $env)
     {
+        $token = self::getToken($user);
         $url = self::getEnvUrl($env);
         $url = "$url/api/Job/updateJobRunningStatus/".$domain."/".$jobID;
         $parameters = [
             'status' => 'Y'
         ];
-        $headers = [];
+        $headers = [
+            'Authorization: Bearer '. $token
+        ];
         $method = "POST";
         $responFromAPI = \T2P\Util\Util::MakeRequest($url, $parameters, $method, $headers);
     }

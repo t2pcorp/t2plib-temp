@@ -97,7 +97,9 @@ stdClass Object
     use \T2PLib\JobLibrary\JobLibrary;
 
     $job = new JobLibrary();
-
+    
+    $job->setEmail("auth@email.com");
+    $job->setPassword("PasswodAuthen");
     $job->setDomain('EXAMPLE');
     $job->setJobID('EXAMPLE001');
     $job->setName('Example Name');
@@ -116,4 +118,9 @@ stdClass Object
     or
     $job->updateJobStatus("Error Message"); // Done with Failed Update
 
+```
+
+# Jobs API Create Authen User
+```
+    php artisan user:register test1 test1@email.com password
 ```

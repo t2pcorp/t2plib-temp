@@ -26,20 +26,43 @@ class JobCheckStatus
         return $url;
     }
 
-    public static function process()
-    {    
+    private static function getToken($email, $password) {
+        $config = \T2P\Util\CommonConfig\Config::get("_ENV.*");
+        $env = $config->value('_ENV.NAME');
+        // $env = "LOCAL";
+
+        $urlEnv = self::getEnvUrl($env);
+        $url = "$urlEnv/api/login";
+        $parameters = [
+            'email' => $email,
+            'password' => $password
+        ];
+        $headers = [];
+        $method = "POST";
+        $responFromAPI = \T2P\Util\Util::MakeRequest($url, $parameters, $method, $headers);
+        $json = json_decode(json_encode($responFromAPI));
+        $result = json_decode($json->result);
+        return $result->token;
+    }
+
+    public static function process($email, $password)
+    {
+        $config = \T2P\Util\CommonConfig\Config::get("_ENV.*");
+        $env = $config->value('_ENV.NAME');
         //Monitor Self Health on AWS DashBoard 
         $jobLib = new \T2PLib\JobLibrary\JobLibrary();
-        $jobLib->updateJobDashboard(100, "Success", "MonitorJobCheck", "JOBS:CheckStatus");
+        $jobLib->updateJobDashboard(100, "Success", "MonitorJobCheck", "JOBS:CheckStatus-$env");
+        // list($email, $password) = explode(' ', readline());
 
         $config = \T2P\Util\CommonConfig\Config::get("_ENV.*");
         $env = $config->value('_ENV.NAME');
-        $env = "LOCAL";
+        // $env = "LOCAL";
 
         $urlEnv = self::getEnvUrl($env);
+        $token = self::getToken($email, $password);
         $url = "$urlEnv/api/Job/getJobDataList";
         $parameters = [];
-        $headers = [];
+        $headers = ['Authorization: Bearer '. $token];
         $method = "GET";
         $responFromAPI = \T2P\Util\Util::MakeRequest($url, $parameters, $method, $headers);
         $json = json_decode(json_encode($responFromAPI));
@@ -84,13 +107,13 @@ class JobCheckStatus
                 "status" => $status,
                 "lastCheck" => $now
             ];
-            $headers = [];
+            $headers = ['Authorization: Bearer '. $token];
             $method = "POST";
             $responFromAPI = \T2P\Util\Util::MakeRequest($url, $parameters, $method, $headers);
         }
         // if found jobs mean API work properly then just update dashboard
         if ($foundJobs) {
-            $jobLib->updateJobDashboard(100, "Success", "MonitorAPI", "JOBS:CheckStatus");
+            $jobLib->updateJobDashboard(100, "Success", "MonitorAPI", "JOBS:CheckStatus-$env");
         }
     }
 }
