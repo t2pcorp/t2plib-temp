@@ -20,7 +20,7 @@ class JobCheckStatus
         if ($env == "SIT") {
             $url = "https://sit-job-api.t2p.co.th";
         }
-        if ($env == "TEST") {
+        if ($env == "UAT") {
             $url = "https://test-job-api.t2p.co.th";
         }
         return $url;

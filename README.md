@@ -124,3 +124,6 @@ stdClass Object
 ```
     php artisan user:register test1 test1@email.com password
 ```
+
+
+# deploy to https://packagist.org/packages/t2pcorp/t2plib

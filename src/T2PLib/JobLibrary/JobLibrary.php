@@ -19,7 +19,7 @@ class JobLibrary
         $config = \T2P\Util\CommonConfig\Config::get("_ENV.*");
         // print_r($config->value('_ENV.NAME'));
         $this->env = $config->value('_ENV.NAME');
-        $this->env = "LOCAL";
+        // $this->env = "LOCAL";
 
         $this->user = (object) [
             'email' => null,
