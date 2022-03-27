@@ -40,7 +40,7 @@ class Notification
     public function sendNotify($type, $address)
     {
         $msgToNotify = $this->message();
-        if ($this->jobData->getSkipCheck() == false)
+        if ($this->jobData->getSkipCheck() == true)
         {
             switch($type)
             {
